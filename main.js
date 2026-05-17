@@ -7,6 +7,10 @@ const apiRoutes = require('./routes/apiRoutes');
 
 const app = express();
 
+const PORT= process.env.PORT || 3000;
+
+
+
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,9 +24,12 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-app.listen(3000, async () => {
-    console.log('Server is running on port 3000');
+app.listen(PORT,() => {
+    
+     connectToDatabase();
+     console.log('Server is running on port'+PORT);
 
-    // connect database
-    await connectToDatabase();
+    
 });
+
+    
