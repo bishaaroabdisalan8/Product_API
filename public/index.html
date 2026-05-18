@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products App</title>
+
+  <style>
+
+    body{
+      font-family: Arial;
+      background:#f4f4f4;
+      padding:40px;
+    }
+
+    .container{
+      max-width:500px;
+      background:white;
+      margin:auto;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input,select,button{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border-radius:5px;
+      border:1px solid #ccc;
+    }
+
+    button{
+      background:#4f46e5;
+      color:white;
+      border:none;
+      cursor:pointer;
+    }
+
+    .product{
+      background:#eee;
+      padding:10px;
+      margin-top:10px;
+      border-radius:5px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Products App</h1>
+
+  <input type="text" id="name" placeholder="Product Name">
+
+  <input type="number" id="price" placeholder="Price">
+
+  <select id="company">
+    <option value="apple">Apple</option>
+    <option value="samsung">Samsung</option>
+    <option value="dell">Dell</option>
+    <option value="mi">Mi</option>
+  </select>
+
+  <button onclick="createProduct()">
+    Create Product
+  </button>
+
+  <button onclick="getProducts()">
+    Load Products
+  </button>
+
+  <div id="products"></div>
+
+</div>
+
+<script>
+
+const API_URL = "/api/products";
+
+
+// CREATE PRODUCT
+async function createProduct(){
+
+  const name = document.getElementById("name").value;
+
+  const price = document.getElementById("price").value;
+
+  const company = document.getElementById("company").value;
+
+
+  const response = await fetch(API_URL,{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body: JSON.stringify({
+      name,
+      price,
+      company,
+      featured:true
+    })
+
+  });
+
+
+  const data = await response.json();
+
+  alert(data.message);
+
+  getProducts();
+}
+
+
+
+// GET PRODUCTS
+async function getProducts(){
+
+  const response = await fetch(API_URL);
+
+  const data = await response.json();
+
+  const productsDiv = document.getElementById("products");
+
+  productsDiv.innerHTML = "";
+
+
+  data.data.forEach(product => {
+
+    productsDiv.innerHTML += `
+
+      <div class="product">
+
+        <h3>${product.name}</h3>
+
+        <p>Price: $${product.price}</p>
+
+        <p>Company: ${product.company}</p>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
